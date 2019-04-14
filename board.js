@@ -1,23 +1,64 @@
 function checkBoardParity(colsAmount, rowsAmount) {
-    return true;
-    // @todo @aniax
+    let multiplication = colsAmount * rowsAmount;
+    if (multiplication % 2 == 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function getRandomNumberFromRange(min, max) {
+    let randomNumber;
+    do {
+        randomNumber = Math.random() * max+1;
+        randomNumber = Math.floor(randomNumber);
+
+    }
+    while (!(randomNumber >= min && randomNumber <= max));
+    return randomNumber;
 }
 
 function getRandomListOfPairsId(colsAmount, rowsAmount) {
-    return [1,4,3,4,2,3,2,1,5,5,6,6,7,7,8,8];
-    // @todo
+    let amountOfAllTiles = colsAmount * rowsAmount;
+    let amountOfPairs = amountOfAllTiles / 2;
+    let randomListOfPairsId = []; 
+
+    //wykonuj dopoki tablica randomListOfPairsId sie nie zapelni (randomListOfPairsId.length < amountOfAllTiles)
+    do {
+        // wylosowac losowa liczbe 
+        let randomNumber = getRandomNumberFromRange(1, amountOfPairs);
+
+        // zobaczyc ile jest wystapien wylosowanej liczby w tablicy randomListOfPairsId
+        let occurencesCount = 0;
+        for (let i=0; i < randomListOfPairsId.length; i++){
+            let currentlyCheckingNumber = randomListOfPairsId[i];
+            if (currentlyCheckingNumber==randomNumber) {
+                occurencesCount++;
+            }
+        }
+
+        //jesli jest mniej niz 2 to dodac randomNumber do tablicy randomListOfPairs, inaczej nie dodawac
+        if (occurencesCount < 2) {
+            randomListOfPairsId.push(randomNumber);
+        }
+    }
+    while (randomListOfPairsId.length < amountOfAllTiles);
+    return randomListOfPairsId; 
+
 }
 
 function generateBoxHtml(pictureId) {
-    return '<div class="game-tile" data-card-type="'+pictureId+'"></div>';
+    return '<div class="game-tile" data-card-type="' + pictureId + '"></div>';
 }
 
 function unCover(clickedId) {
-    // todo
+
 }
 
-function desapireBoth(clickedId, whatWasClickedPreviously) {
-    // todo
+function disappearBoth(clickedId, clickedPictureId) {
+
+    //$('.game-tile'+clickedId).css('opacity', '0');
+    //$('.game-tile'+clickedPictureId).css('opacity', '0');
 }
 
 function hideBoth(clickedId, whatWasClickedPreviously) {
@@ -26,11 +67,13 @@ function hideBoth(clickedId, whatWasClickedPreviously) {
 
 function renderBoard(colsAmount, rowsAmount) {
     if (!checkBoardParity(colsAmount, rowsAmount)) {
-        alert("WTF?");
+        alert("The number of tiles should be even!");
         return false;
     }
 
     let listOfIds = getRandomListOfPairsId(colsAmount, rowsAmount);
+
+console.log(listOfIds);
 
     let numberOfBoxes = colsAmount * rowsAmount;
     for (boxNr = 0; boxNr < numberOfBoxes; boxNr++) {
@@ -51,7 +94,7 @@ function renderBoard(colsAmount, rowsAmount) {
         if (isCheckRequired()) { // czy to jest 2gie klikniecie
             if (checkIfSuccess(clickedPictureId)) {
                 addPoint();
-                desapireBoth(clickedPictureId, whatWasClickedPreviously());
+                disappearBoth(clickedPictureId, whatWasClickedPreviously());
                 console.log("SUCCESS");
             } else {
                 addFail();

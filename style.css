@@ -27,6 +27,7 @@ body
     width: 100px;
     height: 100px;
     background: #f6da17 url(img/title.png) center center no-repeat;
+    
 }
 
 .game-tile:hover
